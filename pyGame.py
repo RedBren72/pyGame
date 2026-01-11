@@ -1,3 +1,6 @@
+# pyGame.py
+# A simple pygame script that initializes a window and prints types of objects.
+
 import pygame
 import random
 import sys
