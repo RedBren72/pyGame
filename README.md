@@ -1,7 +1,8 @@
 # pyGame
 
 ## ToDo
-- [ ]   Basic screen
+- [x]   Basic screen
+- [ ]   Get keyboard input
 - [ ]   Moving paddle
 - [ ]   Moving ball
 - [ ]   Bricks
