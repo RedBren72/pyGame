@@ -34,14 +34,33 @@ gameDisplay.set_caption( "Thru' The Wall" )
 
 print( type( gameScreen ) )
 
-# Outer loop
 gameExit = False
+keyCount = 0
+batPosX = (scrWIDTH // 2) - 2
+ballPosX = scrWIDTH // 2
+ballPosY = scrHEIGHT // 2
+ballDirX = -1
+
+# Outer loop
 while not gameExit:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
+    
+    # We only move when the keycount is zero
+    if keyCount < 100:
+        keyCount += 1
+    else:
+        keyCount = 0
+
+        keyPressed = pygame.key.get_pressed()
+        if keyPressed[ pygame.K_LSHIFT ]:
+            print( "Speed Key Pressed" )
+        if keyPressed[ pygame.K_z ]:
+            print( "Left Key Pressed" )
+        if keyPressed[ pygame.K_x ]:
+            print( "Right Key Pressed" )
+        if keyPressed[ pygame.K_q ]:
+            print( "Quit Key Pressed" )
             gameExit = True
 
-    # Inner loop
 
 
     gameScreen.fill( rgbBLACK )
