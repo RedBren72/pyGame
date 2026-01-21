@@ -2,8 +2,8 @@
 
 ## ToDo
 - [x]   Basic screen
-- [ ]   Get keyboard input
-- [ ]   Moving paddle
-- [ ]   Moving ball
+- [x]   Get keyboard input
+- [x]   Moving paddle
+- [x]   Moving ball
 - [ ]   Bricks
 - [ ]   Putting it together
