@@ -38,6 +38,7 @@ scrSIZE = 20
 
 # Initialise Game Variables
 gameSpeed = 120
+gameScore = 0
 gameExit = False
 keyPressed = False
 
@@ -140,7 +141,7 @@ def createWalls():
     brickColours = [ rgbRED, rgbGREEN, rgbBLUE, rgbYELLOW, rgbMAGENTA ]
     for row in range(5):
         brickRow = []
-        yPos = row * scrSIZE
+        yPos = (3+row) * scrSIZE
         if row % 2 == 0:
             # Odd row - full bricks only
             for col in range(scrWIDTH // (scrSIZE * 2)):
@@ -157,8 +158,17 @@ def createWalls():
                 brickRow.append( (brickRect, brickColours[row]) )
             halfBrickRectEnd = pygame.Rect(scrWIDTH - scrSIZE, yPos, scrSIZE, scrSIZE)
             brickRow.append( (halfBrickRectEnd, brickColours[row]) )
-        wall.append(brickRow)
-    
+        wall.append(brickRow)    
+        
+    return wall
+
+# Display the wall five rows down from the top
+def displayWall(wall):
+    for row in wall:
+        for brick, colour in row:
+            pygame.draw.rect(gameScreen, colour, brick)
+            pygame.draw.rect(gameScreen, rgbBLACK, brick, 1)  # Black border
+            
 
 # Main game loop
 while not gameExit:
@@ -181,6 +191,7 @@ while not gameExit:
                     gameRunning = True
                     menu = False
                     
+    wall = createWalls()
 
     # Game loop
     while gameRunning:
@@ -214,6 +225,17 @@ while not gameExit:
         if batPosX > scrWIDTH - 80:
             batPosX = scrWIDTH - 80
 
+        # Collision detection with walls for ball
+        for row in wall:
+            for brick, colour in row:
+                if brick.collidepoint(ballPosX, ballPosY):
+                    wall[row.index( (brick, colour) )].remove( (brick, colour) )
+                    ballDirY = -ballDirY
+                    gameScore += 10
+                    # if ball hits the side of a brick, reverse X direction
+                    if (ballPosX <= brick.left) or (ballPosX >= brick.right):
+                        ballDirX = -ballDirX
+
         # Update ball position
         if ballPosX >= scrWIDTH or ballPosX <= 0:
             ballDirX = -ballDirX
@@ -223,26 +245,30 @@ while not gameExit:
         ballPosY += ballDirY
 
         # Collision detection with bat
-        if (ballPosY >= scrHEIGHT - scrSIZE*2.5) and (batPosX <= ballPosX <= batPosX + scrSIZE*4):
+        if (ballPosY >= scrHEIGHT - scrSIZE*3.5) and (batPosX <= ballPosX <= batPosX + scrSIZE*4):
             # if ball hits the left corner of the bat from the left bounce up
             # if ball hits the right corner of the bat from the right bounce up
             if ballDirX == dirSTOP:
                 ballDirX = random.choice( [dirLEFT, dirRIGHT] )
             ballDirY = -ballDirY
             gameSpeed += 5
+            gameScore += 1
 
         # Missed ball detection
-        if ballPosY > scrHEIGHT-scrSIZE*2:
+        if ballPosY > scrHEIGHT-scrSIZE*2.5:
             ballPosX, ballPosY = scrWIDTH // 2, scrHEIGHT // 2
             ballDirX = dirSTOP
             ballDirY = dirDOWN
 
         # Draw everything
         gameScreen.fill( rgbCYAN )
+        displayWall( wall )
         pygame.draw.circle( gameScreen, rgbBLACK, (ballPosX, ballPosY), scrSIZE // 2 )
-        pygame.draw.rect( gameScreen, rgbBLACK, (batPosX, scrHEIGHT - scrSIZE*2, scrSIZE*4, scrSIZE) )
-        pygame.display.update()
-        
+        pygame.draw.rect( gameScreen, rgbBLACK, (batPosX, scrHEIGHT - scrSIZE*3, scrSIZE*4, scrSIZE) )
+        font = pygame.font.SysFont(None, 35)
+        scoreText = font.render("Level: " + str(gameSpeed), True, rgbBLACK)
+        gameScreen.blit(scoreText, (10, scrHEIGHT - 40))
+        pygame.display.update()        
         
         gameClock.tick( gameSpeed )
         
