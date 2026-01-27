@@ -39,7 +39,7 @@ scrAREA = scrWIDTH, scrHEIGHT = 1600, 1200
 scrSIZE = 50
 
 # Initialise Game Variables
-gameSpeed = 120
+gameSpeed = scrHEIGHT//2
 gameScore = 0
 gameExit = False
 keyPressed = False
@@ -242,8 +242,7 @@ while not gameExit:
             if ballDirX == dirSTOP:
                 ballDirX = random.choice( [dirLEFT, dirRIGHT] )
             ballDirY = -ballDirY
-            gameSpeed += 5
-            gameScore += 1
+            gameScore += 10
 
         # Missed ball detection
         if ballPosY > scrHEIGHT-scrSIZE*2.5:
@@ -257,12 +256,9 @@ while not gameExit:
             for brick, colour in row:
                 # check the edge of the ball against the brick
                 if brick.collidepoint(ballPosX + ( ballDirX * scrSIZE // 2 ), ballPosY + ( ballDirY * scrSIZE // 2 ) ):
-                    # remove the brick from the wall
-                    # this does not work. Can't remove from list while iterating over it
-                    #row.remove( (brick, colour) )
                     row.remove( (brick, colour) )
                     ballDirY = -ballDirY
-                    gameScore += 10
+                    gameScore += 25
                     # if ball hits the side of a brick, reverse X direction
                     #if (ballPosX <= brick.left) or (ballPosX >= brick.right):
                     #    ballDirX = -ballDirX
@@ -273,8 +269,8 @@ while not gameExit:
         pygame.draw.circle( gameScreen, rgbBLACK, (ballPosX, ballPosY), scrSIZE // 2 )
         pygame.draw.rect( gameScreen, rgbBLACK, (batPosX, scrHEIGHT - scrSIZE*3, scrSIZE*4, scrSIZE) )
         font = pygame.font.SysFont(None, 35)
-        scoreText = font.render("Level: " + str(gameSpeed), True, rgbBLACK)
-        gameScreen.blit(scoreText, (10, scrHEIGHT - 40))
+        scoreText = font.render("Score: " + str(gameScore), True, rgbBLACK)
+        gameScreen.blit(scoreText, (10, scrHEIGHT - scrSIZE))
         pygame.display.update()        
         
         gameClock.tick( gameSpeed )
