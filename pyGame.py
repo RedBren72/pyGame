@@ -1,5 +1,7 @@
-# pyGame.py
-# A simple pygame script that initializes a window and prints types of objects.
+# A simple pygame implementation of the ZX Spectrum game "Thru' The Wall"
+# Original game by Costa Panayi
+# Pygame version by ChatGPT 4.0
+
 
 import pygame
 import random
@@ -33,8 +35,8 @@ dirDOWN = 1
 dirSTOP = 0
 
 # Screen dimensions
-scrAREA = scrWIDTH, scrHEIGHT = 640, 480
-scrSIZE = 20
+scrAREA = scrWIDTH, scrHEIGHT = 1600, 1200
+scrSIZE = 50
 
 # Initialise Game Variables
 gameSpeed = 120
@@ -138,7 +140,7 @@ def createWalls():
     # The even rows start and end with half-bricks
     # Brick positions are stored in a 2D array
     wall = []
-    brickColours = [ rgbRED, rgbGREEN, rgbBLUE, rgbYELLOW, rgbMAGENTA ]
+    brickColours = [ rgbRED, rgbGREEN, rgbMAGENTA, rgbYELLOW, rgbBLUE ]
     for row in range(5):
         brickRow = []
         yPos = (3+row) * scrSIZE
@@ -222,24 +224,13 @@ while not gameExit:
         batPosX += batSpeed * batdirX
         if batPosX < 0:
             batPosX = 0
-        if batPosX > scrWIDTH - 80:
-            batPosX = scrWIDTH - 80
-
-        # Collision detection with walls for ball
-        for row in wall:
-            for brick, colour in row:
-                if brick.collidepoint(ballPosX, ballPosY):
-                    wall[row.index( (brick, colour) )].remove( (brick, colour) )
-                    ballDirY = -ballDirY
-                    gameScore += 10
-                    # if ball hits the side of a brick, reverse X direction
-                    if (ballPosX <= brick.left) or (ballPosX >= brick.right):
-                        ballDirX = -ballDirX
+        if batPosX > scrWIDTH - scrSIZE * 4:
+            batPosX = scrWIDTH - scrSIZE * 4
 
         # Update ball position
-        if ballPosX >= scrWIDTH or ballPosX <= 0:
+        if ballPosX >= ( scrWIDTH - scrSIZE // 2 ) or ballPosX <= scrSIZE // 2:
             ballDirX = -ballDirX
-        if ballPosY >= scrHEIGHT or ballPosY <= 0:
+        if ballPosY >= ( scrHEIGHT - scrSIZE // 2 ) or ballPosY <= scrSIZE // 2:
             ballDirY = -ballDirY
         ballPosX += ballDirX
         ballPosY += ballDirY
@@ -259,6 +250,22 @@ while not gameExit:
             ballPosX, ballPosY = scrWIDTH // 2, scrHEIGHT // 2
             ballDirX = dirSTOP
             ballDirY = dirDOWN
+
+        # Collision detection with bricks
+        # Check wall in reverse order so that bricks are removed correctly
+        for row in reversed(wall):
+            for brick, colour in row:
+                # check the edge of the ball against the brick
+                if brick.collidepoint(ballPosX + ( ballDirX * scrSIZE // 2 ), ballPosY + ( ballDirY * scrSIZE // 2 ) ):
+                    # remove the brick from the wall
+                    # this does not work. Can't remove from list while iterating over it
+                    #row.remove( (brick, colour) )
+                    row.remove( (brick, colour) )
+                    ballDirY = -ballDirY
+                    gameScore += 10
+                    # if ball hits the side of a brick, reverse X direction
+                    #if (ballPosX <= brick.left) or (ballPosX >= brick.right):
+                    #    ballDirX = -ballDirX
 
         # Draw everything
         gameScreen.fill( rgbCYAN )
