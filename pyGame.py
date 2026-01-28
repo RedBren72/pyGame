@@ -39,7 +39,7 @@ scrAREA = scrWIDTH, scrHEIGHT = 1600, 1200
 scrSIZE = 50
 
 # Initialise Game Variables
-gameSpeed = scrHEIGHT//2
+gameSpeed = scrHEIGHT//10
 gameScore = 0
 gameExit = False
 keyPressed = False
@@ -236,13 +236,13 @@ while not gameExit:
         ballPosY += ballDirY
 
         # Collision detection with bat
-        if (ballPosY >= scrHEIGHT - scrSIZE*3.5) and (batPosX <= ballPosX <= batPosX + scrSIZE*4):
+        if ( scrHEIGHT - scrSIZE*3.5 <= ballPosY <= scrHEIGHT - scrSIZE * 2.5) and (batPosX - scrSIZE*1.5 <= ballPosX <= batPosX + scrSIZE*4.5):
             # if ball hits the left corner of the bat from the left bounce up
             # if ball hits the right corner of the bat from the right bounce up
             if ballDirX == dirSTOP:
                 ballDirX = random.choice( [dirLEFT, dirRIGHT] )
             ballDirY = -ballDirY
-            gameScore += 10
+            gameScore += 1
 
         # Missed ball detection
         if ballPosY > scrHEIGHT-scrSIZE*2.5:
@@ -258,7 +258,7 @@ while not gameExit:
                 if brick.collidepoint(ballPosX + ( ballDirX * scrSIZE // 2 ), ballPosY + ( ballDirY * scrSIZE // 2 ) ):
                     row.remove( (brick, colour) )
                     ballDirY = -ballDirY
-                    gameScore += 25
+                    gameScore += 5 * ( len(wall) - wall.index(row) )
                     # if ball hits the side of a brick, reverse X direction
                     #if (ballPosX <= brick.left) or (ballPosX >= brick.right):
                     #    ballDirX = -ballDirX
