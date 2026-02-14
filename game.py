@@ -75,7 +75,7 @@ class GameState:
 
         pygame.init()
         self.gameDisplay = pygame.display
-        self.gameDisplay.set_caption("Thru' The Wall")
+        self.gameDisplay.set_caption("Breakout")
         self.gameScreen = self.gameDisplay.set_mode(self.scrAREA)
         self.gameClock = pygame.time.Clock()
 

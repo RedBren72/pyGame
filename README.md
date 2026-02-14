@@ -1,15 +1,27 @@
-# pyGame
+# pyGame Breakout
 
-## ToDo
-- [x]   Basic screen
-- [x]   Get keyboard input
-- [x]   Moving paddle
-- [x]   Moving ball
-- [x]   Bricks
-- [x]   Putting it together
-- [x]   Refine score calculation
-- [x]   Modularise the code
-- [ ]   Refine collision detection for sides of bricks
-- [ ]   Refine collision detection for corners of bat
-- [ ]   Refine game logic when wall is demolished
-- [ ]   Introduce game logic for player lives (3 lives, Extra life on demolishing walls) 
+A classic Breakout/Brick Breaker game implemented in Python using Pygame. Control a paddle to bounce a ball and destroy all the bricks on the screen while avoiding letting the ball fall off the bottom.
+
+This project is inspired by the ZX Spectrum game **"Thru' The Wall"**, recreating the classic brick-breaking gameplay with modern Python development practices.
+
+## Features
+
+- Interactive paddle controlled by keyboard input
+- Ball physics with collision detection
+- Destructible brick wall with scoring system
+- Level progression system
+- Game state management with score and level tracking
+
+## Project Structure
+
+- `game.py` - Main game state and logic
+- `ball.py` - Ball entity and behavior
+- `bat.py` - Paddle entity and movement
+- `wall.py` - Wall/brick entity management
+- `breakout.py` - Game launcher and main loop
+- `TODO.md` - Feature roadmap and planned improvements
+
+## Requirements
+
+- pygame
+- Python 3.6+
