@@ -1,6 +1,6 @@
 import pygame
 import random
-from constants import dirSTOP, dirDOWN, scrSIZE
+from game import dirSTOP, dirDOWN, scrSIZE
 
 class Ball:
     def __init__(self, x, y, radius, dx, dy, color):
@@ -17,12 +17,17 @@ class Ball:
         self.y += self.dy
 
         # Bounce off left/right edges
-        if self.x - self.radius < 0 or self.x + self.radius > width:
+        if self.x - self.radius < 0:
             self.dx = -self.dx
+            self.x = self.radius
+        elif self.x + self.radius > width:
+            self.dx = -self.dx
+            self.x = width - self.radius
         
         # Bounce off top edge (bottom edge is handled by missed ball detection)
         if self.y - self.radius < 0:
             self.dy = -self.dy
+            self.y = self.radius
 
     def draw(self, screen):
         pygame.draw.circle(screen, self.color, (int(self.x), int(self.y)), self.radius)

@@ -1,5 +1,5 @@
 import pygame
-from constants import dirSTOP, dirLEFT, dirRIGHT
+from game import dirSTOP, dirLEFT, dirRIGHT
 
 class Bat:
     def __init__(self, x, y, width, height, color):

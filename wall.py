@@ -1,5 +1,5 @@
 import pygame
-from constants import rgbRED, rgbGREEN, rgbBLUE, rgbYELLOW, rgbMAGENTA, rgbBLACK
+from game import rgbRED, rgbGREEN, rgbBLUE, rgbYELLOW, rgbMAGENTA, rgbBLACK
 
 class Wall:
     def __init__(self, screen_width, screen_height, brick_size, start_row=3):
@@ -52,10 +52,10 @@ class Wall:
         
         for row_idx, row in enumerate(self.bricks):
             for brick_idx, (brick, colour) in enumerate(row):
-                # Create a rect for the ball's next position
+                # Create a rect for the ball's current position
                 ball_rect = pygame.Rect(
-                    ball_obj.x + (ball_obj.dx * self.brick_size // 2) - ball_obj.radius,
-                    ball_obj.y + (ball_obj.dy * self.brick_size // 2) - ball_obj.radius,
+                    ball_obj.x - ball_obj.radius,
+                    ball_obj.y - ball_obj.radius,
                     ball_obj.radius * 2,
                     ball_obj.radius * 2
                 )
@@ -64,11 +64,25 @@ class Wall:
                     # Update score based on game level and row of brick hit
                     score_increase = 5 * (len(self.bricks) - row_idx + game_level)
                     
+                    # Determine which side of the brick was hit
+                    # Find the overlap areas to determine the collision side
+                    overlap_left = (ball_rect.right - brick.left) if ball_rect.right > brick.left else float('inf')
+                    overlap_right = (brick.right - ball_rect.left) if ball_rect.left < brick.right else float('inf')
+                    overlap_top = (ball_rect.bottom - brick.top) if ball_rect.bottom > brick.top else float('inf')
+                    overlap_bottom = (brick.bottom - ball_rect.top) if ball_rect.top < brick.bottom else float('inf')
+                    
+                    # Find the minimum overlap to determine the collision side
+                    min_overlap = min(overlap_left, overlap_right, overlap_top, overlap_bottom)
+                    
+                    if min_overlap == overlap_top or min_overlap == overlap_bottom:
+                        # Hit top or bottom of brick
+                        ball_obj.dy = -ball_obj.dy
+                    else:
+                        # Hit left or right of brick
+                        ball_obj.dx = -ball_obj.dx
+                    
                     # Remove the brick
                     row.pop(brick_idx)
-                    
-                    # Bounce the ball
-                    ball_obj.dy = -ball_obj.dy
                     return score_increase
         
         return score_increase

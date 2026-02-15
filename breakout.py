@@ -13,7 +13,7 @@ state = GameState()
 def showIntro():
 
     font = pygame.font.SysFont(None, 200)
-    titleText = font.render("Thru' The Wall", True, state.rgbWHITE)
+    titleText = font.render("Breakout", True, state.rgbWHITE)
     font = pygame.font.SysFont(None, 50)
     directionText = font.render("Z for Left - X for Right SHIFT for Speed", True, state.rgbWHITE)
     instructionText = font.render("Press SPACE to Start", True, state.rgbWHITE)
